@@ -1,0 +1,46 @@
+<main class="msgbox">
+  <input type='text'
+          placeholder="Skriv noe"
+          bind:value='melding'
+          on:keydown='keydown(event)'
+          on:blur='endre()'/>
+</main>
+
+<script>
+  export default {
+    data() {
+      return {
+        "melding": ''
+      }
+    },
+    methods: {
+      endre(){
+        const mld = this.get('melding');
+        if(!mld) return;
+
+        const ref = this.get('ref');
+        ref.push();
+        ref.set(mld);
+
+        this.set({
+          'melding' : ''
+        });
+      },
+      keydown(evt) {
+        if(evt.code === 'Enter'){
+            this.endre();
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+
+input {
+  width: 100%;
+  height: 3em;
+  font-size: 1.5em;
+  border: none;
+}
+</style>

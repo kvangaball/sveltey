@@ -1,0 +1,35 @@
+<main class="meldinger">
+  <ol>
+  {{#each meldinger as m}}
+    <li>{{m}}</li>
+  {{/each}}
+  </ol>
+</main>
+
+<script>
+
+export default {
+  onrender() {
+    const component = this;
+
+    this.get('ref').on('child_added', (msg) => {
+      const alle = component.get('meldinger');
+      alle.push(msg.val());
+      component.set({
+        'meldinger': alle
+      });
+    });
+  },
+  data() {
+    return {
+      meldinger: []
+    }
+  }
+};
+</script>
+
+<style>
+  ol {
+    list-style: none;
+  }
+</style>

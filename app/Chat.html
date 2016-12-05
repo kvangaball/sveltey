@@ -1,0 +1,68 @@
+<div class='chat'>
+  <h1>Chat</h1>
+  <div class="container">
+    <Meldinger ref='{{ ref }}' />
+    <aside class="brukere">
+      <ol style="list-style: none">
+        <li>wollan</li>
+        <li>mykle</li>
+      </ol>
+
+
+    </aside>
+  </div>
+
+  <SkrivMelding ref='{{ ref }}' />
+</main>
+
+<script>
+import Meldinger from './Meldinger.html'
+import SkrivMelding from './SkrivMelding.html';
+
+export default {
+  onrender(){
+    const firebase = this.get('firebase');
+    const ref = firebase.database().ref('chat/')
+
+    this.set({
+      ref: ref
+    })
+  },
+  data(){
+    return {
+      ref: null
+    }
+  }
+
+  components: {
+    Meldinger,
+    SkrivMelding
+  }
+};
+
+</script>
+
+<style>
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.container {
+  display: flex;
+  flex: 1 0 auto; /* 2 */
+  flex-direction: row;
+}
+.brukere {
+  border: 1px solid;
+  flex: 1 0 auto;
+}
+.meldinger {
+  border: 1px solid;
+  flex: 5 0 auto; /* 2 */
+}
+.msgbox {
+  border: 1px solid;
+  flex:none;
+}
+</style>
