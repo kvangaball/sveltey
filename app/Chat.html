@@ -2,14 +2,7 @@
   <h1>Chat</h1>
   <div class="container">
     <Meldinger ref='{{ ref }}' />
-    <aside class="brukere">
-      <ol style="list-style: none">
-        <li>wollan</li>
-        <li>mykle</li>
-      </ol>
-
-
-    </aside>
+    <Brukere />
   </div>
 
   <SkrivMelding ref='{{ ref }}' />
@@ -18,6 +11,7 @@
 <script>
 import Meldinger from './Meldinger.html'
 import SkrivMelding from './SkrivMelding.html';
+import Brukere from './Brukere.html';
 
 export default {
   onrender(){
@@ -32,11 +26,11 @@ export default {
     return {
       ref: null
     }
-  }
-
+  },
   components: {
     Meldinger,
-    SkrivMelding
+    SkrivMelding,
+    Brukere
   }
 };
 
