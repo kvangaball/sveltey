@@ -14,19 +14,6 @@ import SkrivMelding from './SkrivMelding.html';
 import Brukere from './Brukere.html';
 
 export default {
-  onrender(){
-    const firebase = this.get('firebase');
-    const ref = firebase.database().ref('chat/')
-
-    this.set({
-      ref: ref
-    })
-  },
-  data(){
-    return {
-      ref: null
-    }
-  },
   components: {
     Meldinger,
     SkrivMelding,
@@ -53,7 +40,7 @@ export default {
 }
 .meldinger {
   border: 1px solid;
-  flex: 5 0 auto; /* 2 */
+  flex: 3 0 auto; /* 2 */
 }
 .msgbox {
   border: 1px solid;

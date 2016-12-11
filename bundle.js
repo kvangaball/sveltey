@@ -1,13 +1,62 @@
 (function () {
 'use strict';
 
-var template$1 = (function () {
+const config = {
+    apiKey: "AIzaSyBFx6s5DDMhDzrfsYF8GnbZ-BCfFhT0UyA",
+    authDomain: "slaeck-35944.firebaseapp.com",
+    databaseURL: "https://slaeck-35944.firebaseio.com",
+    storageBucket: "slaeck-35944.appspot.com",
+    messagingSenderId: "533570292396"
+  };
 
+const firebaseApp = firebase.initializeApp(config);
+const provider = new firebase.auth.GoogleAuthProvider();
+
+const brukere = firebase.database().ref('users/');
+const meldinger = firebase.database().ref('chat/');
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if(!user){
+    firebase.auth().signInWithPopup(provider).then(function(result) {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      console.log("autentisert");
+      var token = result.credential.accessToken;
+      // The signed-in user info.
+      var user = result.user;
+      console.log(user);
+      brukere.set({name: user.displayName});
+
+      // ...
+    }).catch(function(error) {
+
+      console.log("feil", error);
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+
+      // ...
+    });
+  } else {
+    console.log("wuu", user);
+    brukere.set({name: user.displayName});
+  }
+});
+
+var FirebaseApp = {
+  meldinger,
+  brukere
+};
+
+var template$1 = (function () {
 return {
   onrender() {
     const component = this;
 
-    this.get('ref').on('child_added', (msg) => {
+    FirebaseApp.meldinger.on('child_added', (msg) => {
       const alle = component.get('meldinger');
       alle.push(msg.val());
       component.set({
@@ -26,7 +75,7 @@ return {
 let addedCss$1 = false;
 function addCss$1 () {
 	var style = document.createElement( 'style' );
-	style.textContent = "                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n  ol[svelte-4114935199], [svelte-4114935199] ol {\n    list-style: none;\n  }\n";
+	style.textContent = "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n  ol[svelte-2398454431], [svelte-2398454431] ol {\n    list-style: none;\n  }\n";
 	document.head.appendChild( style );
 
 	addedCss$1 = true;
@@ -34,7 +83,7 @@ function addCss$1 () {
 
 function renderMainFragment$1 ( root, component, target ) {
 	var main = document.createElement( 'main' );
-	main.setAttribute( 'svelte-4114935199', '' );
+	main.setAttribute( 'svelte-2398454431', '' );
 	main.className = "meldinger";
 	
 	var ol = document.createElement( 'ol' );
@@ -219,38 +268,37 @@ function Meldinger ( options ) {
 }
 
 var template$2 = (function () {
-  return {
-    data() {
-      return {
-        "melding": ''
-      }
+return {
+  data() {
+    return {
+      "melding": ''
+    }
+  },
+  methods: {
+    endre(){
+      const mld = this.get('melding');
+      if(!mld) return;
+
+      FirebaseApp.meldinger.push();
+      FirebaseApp.meldinger.set(mld);
+
+      this.set({
+        'melding' : ''
+      });
     },
-    methods: {
-      endre(){
-        const mld = this.get('melding');
-        if(!mld) return;
-
-        const ref = this.get('ref');
-        ref.push();
-        ref.set(mld);
-
-        this.set({
-          'melding' : ''
-        });
-      },
-      keydown(evt) {
-        if(evt.code === 'Enter'){
-            this.endre();
-        }
+    keydown(evt) {
+      if(evt.code === 'Enter'){
+          this.endre();
       }
     }
   }
+}
 }());
 
 let addedCss$2 = false;
 function addCss$2 () {
 	var style = document.createElement( 'style' );
-	style.textContent = "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \n\ninput[svelte-3383194058], [svelte-3383194058] input {\n  width: 100%;\n  height: 3em;\n  font-size: 1.5em;\n  border: none;\n}\n";
+	style.textContent = "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \n\ninput[svelte-408349965], [svelte-408349965] input {\n  width: 100%;\n  height: 3em;\n  font-size: 1.5em;\n  border: none;\n}\n";
 	document.head.appendChild( style );
 
 	addedCss$2 = true;
@@ -258,7 +306,7 @@ function addCss$2 () {
 
 function renderMainFragment$2 ( root, component, target ) {
 	var main = document.createElement( 'main' );
-	main.setAttribute( 'svelte-3383194058', '' );
+	main.setAttribute( 'svelte-408349965', '' );
 	main.className = "msgbox";
 	
 	var input = document.createElement( 'input' );
@@ -407,6 +455,29 @@ function SkrivMelding ( options ) {
 
 SkrivMelding.prototype = template$2.methods;
 
+var template$3 = (function () {
+
+return {
+  onrender(){
+    const component = this;
+
+    FirebaseApp.brukere.on('child_added', function(user){
+      console.log(user.val());
+      const brukere = component.get('brukere');
+      brukere.push(user.val());
+
+      component.set('brukere', brukere);
+    });
+  },
+  data(){
+    return {
+      brukere: []
+    }
+  }
+};
+
+}());
+
 function renderMainFragment$3 ( root, component, target ) {
 	var aside = document.createElement( 'aside' );
 	aside.className = "brukere";
@@ -414,26 +485,81 @@ function renderMainFragment$3 ( root, component, target ) {
 	var ol = document.createElement( 'ol' );
 	ol.style.cssText = "list-style: none";
 	
+	var eachBlock_0_anchor = document.createComment( "#each brukere" );
+	ol.appendChild( eachBlock_0_anchor );
+	
+	var eachBlock_0_value = root.brukere;
+	var eachBlock_0_fragment = document.createDocumentFragment();
+	var eachBlock_0_iterations = [];
+	
+	for ( var i = 0; i < eachBlock_0_value.length; i += 1 ) {
+		eachBlock_0_iterations[i] = renderEachBlock_0$1( root, eachBlock_0_value, eachBlock_0_value[i], i, component, eachBlock_0_fragment );
+	}
+	
+	eachBlock_0_anchor.parentNode.insertBefore( eachBlock_0_fragment, eachBlock_0_anchor );
+	
 	aside.appendChild( ol );
 	
 	target.appendChild( aside );
 
 	return {
 		update: function ( changed, root ) {
+			var eachBlock_0_value = root.brukere;
 			
+			for ( var i = 0; i < eachBlock_0_value.length; i += 1 ) {
+				if ( !eachBlock_0_iterations[i] ) {
+					eachBlock_0_iterations[i] = renderEachBlock_0$1( root, eachBlock_0_value, eachBlock_0_value[i], i, component, eachBlock_0_fragment );
+				} else {
+					eachBlock_0_iterations[i].update( changed, root, eachBlock_0_value, eachBlock_0_value[i], i );
+				}
+			}
+			
+			for ( var i = eachBlock_0_value.length; i < eachBlock_0_iterations.length; i += 1 ) {
+				eachBlock_0_iterations[i].teardown( true );
+			}
+			
+			eachBlock_0_anchor.parentNode.insertBefore( eachBlock_0_fragment, eachBlock_0_anchor );
+			eachBlock_0_iterations.length = eachBlock_0_value.length;
 		},
 
 		teardown: function ( detach ) {
 			if ( detach ) aside.parentNode.removeChild( aside );
 			
 			
+			
+			for ( var i = 0; i < eachBlock_0_iterations.length; i += 1 ) {
+				eachBlock_0_iterations[i].teardown( detach );
+			}
+			
+			if ( detach ) eachBlock_0_anchor.parentNode.removeChild( eachBlock_0_anchor );
+		}
+	};
+}
+
+function renderEachBlock_0$1 ( root, eachBlock_0_value, b, b__index, component, target ) {
+	var li = document.createElement( 'li' );
+	
+	var text = document.createTextNode( b );
+	li.appendChild( text );
+	
+	target.appendChild( li );
+
+	return {
+		update: function ( changed, root, eachBlock_0_value, b, b__index ) {
+			var b = eachBlock_0_value[b__index];
+			
+			text.data = b;
+		},
+
+		teardown: function ( detach ) {
+			if ( detach ) li.parentNode.removeChild( li );
 		}
 	};
 }
 
 function Brukere ( options ) {
 	var component = this;
-	var state = options.data || {};
+	var state = Object.assign( template$3.data(), options.data );
 
 	var observers = {
 		immediate: Object.create( null ),
@@ -528,23 +654,16 @@ function Brukere ( options ) {
 	};
 
 	var mainFragment = renderMainFragment$3( state, this, options.target );
+	
+	if ( options.parent ) {
+		options.parent.__renderHooks.push({ fn: template$3.onrender, context: this });
+	} else {
+		template$3.onrender.call( this );
+	}
 }
 
 var template = (function () {
 return {
-  onrender(){
-    const firebase = this.get('firebase');
-    const ref = firebase.database().ref('chat/');
-
-    this.set({
-      ref: ref
-    });
-  },
-  data(){
-    return {
-      ref: null
-    }
-  },
   components: {
     Meldinger,
     SkrivMelding,
@@ -557,7 +676,7 @@ return {
 let addedCss = false;
 function addCss () {
 	var style = document.createElement( 'style' );
-	style.textContent = "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \n.chat[svelte-3354131871], [svelte-3354131871] .chat {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n.container[svelte-3354131871], [svelte-3354131871] .container {\n  display: flex;\n  flex: 1 0 auto; \n  flex-direction: row;\n}\n.brukere[svelte-3354131871], [svelte-3354131871] .brukere {\n  border: 1px solid;\n  flex: 1 0 auto;\n}\n.meldinger[svelte-3354131871], [svelte-3354131871] .meldinger {\n  border: 1px solid;\n  flex: 5 0 auto; \n}\n.msgbox[svelte-3354131871], [svelte-3354131871] .msgbox {\n  border: 1px solid;\n  flex:none;\n}\n";
+	style.textContent = "                                                                                                                                                                                                                                                                                                                                                                                                                      \n.chat[svelte-1214702622], [svelte-1214702622] .chat {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n.container[svelte-1214702622], [svelte-1214702622] .container {\n  display: flex;\n  flex: 1 0 auto; \n  flex-direction: row;\n}\n.brukere[svelte-1214702622], [svelte-1214702622] .brukere {\n  border: 1px solid;\n  flex: 1 0 auto;\n}\n.meldinger[svelte-1214702622], [svelte-1214702622] .meldinger {\n  border: 1px solid;\n  flex: 3 0 auto; \n}\n.msgbox[svelte-1214702622], [svelte-1214702622] .msgbox {\n  border: 1px solid;\n  flex:none;\n}\n";
 	document.head.appendChild( style );
 
 	addedCss = true;
@@ -565,7 +684,7 @@ function addCss () {
 
 function renderMainFragment ( root, component, target ) {
 	var div = document.createElement( 'div' );
-	div.setAttribute( 'svelte-3354131871', '' );
+	div.setAttribute( 'svelte-1214702622', '' );
 	div.className = "chat";
 	
 	var h1 = document.createElement( 'h1' );
@@ -657,7 +776,7 @@ function renderMainFragment ( root, component, target ) {
 
 function Chat ( options ) {
 	var component = this;
-	var state = Object.assign( template.data(), options.data );
+	var state = options.data || {};
 
 	var observers = {
 		immediate: Object.create( null ),
@@ -766,50 +885,13 @@ function Chat ( options ) {
 		var hook = this.__renderHooks.pop();
 		hook.fn.call( hook.context );
 	}
-	
-	if ( options.parent ) {
-		options.parent.__renderHooks.push({ fn: template.onrender, context: this });
-	} else {
-		template.onrender.call( this );
-	}
 }
 
-const config = {
-    apiKey: "AIzaSyBFx6s5DDMhDzrfsYF8GnbZ-BCfFhT0UyA",
-    authDomain: "slaeck-35944.firebaseapp.com",
-    databaseURL: "https://slaeck-35944.firebaseio.com",
-    storageBucket: "slaeck-35944.appspot.com",
-    messagingSenderId: "533570292396"
-  };
-const firebaseApp = firebase.initializeApp(config);
-// FirebaseUI config.
-
-var uiConfig = {
-  signInSuccessUrl: 'https://kvangaball.github.io/sveltey/index.html',
-  signInOptions: [
-    // Leave the lines as is for the providers you want to offer your users.
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID
-  ],
-  callbacks: {
-          signInSuccess: function(currentUser, credential, redirectUrl) {
-            
-            const chat = new Chat({
-              target: document.querySelector( '#root' ),
-              data: {
-                firebase: window.firebaseApp
-              }
-            });
-
-            return true;
-          }
-        },
-  // Terms of service url.
-  tosUrl: 'https://kvangaball.github.io/sveltey/index.html'
-};
-
-// Initialize the FirebaseUI Widget using Firebase.
-var ui = new firebaseui.auth.AuthUI(firebase.auth());
-// The start method will wait until the DOM is loaded.
-ui.start('#firebaseui-auth-container', uiConfig);
+var chat = new Chat({
+  target: document.querySelector( '#root' ),
+  data: {
+    
+  }
+});
 
 }());

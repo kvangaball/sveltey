@@ -7,12 +7,13 @@
 </main>
 
 <script>
+import FirebaseApp from  './FirebaseApp';
 
 export default {
   onrender() {
     const component = this;
 
-    this.get('ref').on('child_added', (msg) => {
+    FirebaseApp.meldinger.on('child_added', (msg) => {
       const alle = component.get('meldinger');
       alle.push(msg.val());
       component.set({

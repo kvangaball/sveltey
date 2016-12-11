@@ -7,32 +7,33 @@
 </main>
 
 <script>
-  export default {
-    data() {
-      return {
-        "melding": ''
-      }
+import FirebaseApp from './FirebaseApp';
+
+export default {
+  data() {
+    return {
+      "melding": ''
+    }
+  },
+  methods: {
+    endre(){
+      const mld = this.get('melding');
+      if(!mld) return;
+
+      FirebaseApp.meldinger.push();
+      FirebaseApp.meldinger.set(mld);
+
+      this.set({
+        'melding' : ''
+      });
     },
-    methods: {
-      endre(){
-        const mld = this.get('melding');
-        if(!mld) return;
-
-        const ref = this.get('ref');
-        ref.push();
-        ref.set(mld);
-
-        this.set({
-          'melding' : ''
-        });
-      },
-      keydown(evt) {
-        if(evt.code === 'Enter'){
-            this.endre();
-        }
+    keydown(evt) {
+      if(evt.code === 'Enter'){
+          this.endre();
       }
     }
   }
+}
 </script>
 
 <style>

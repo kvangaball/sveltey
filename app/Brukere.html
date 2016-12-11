@@ -1,5 +1,33 @@
 <aside class="brukere">
   <ol style="list-style: none">
+    {{#each brukere as b}}
+      <li>{{ b }}</li>
+    {{/each}}
 
   </ol>
 </aside>
+
+<script>
+
+import FirebaseApp from './FirebaseApp';
+
+export default {
+  onrender(){
+    const component = this;
+
+    FirebaseApp.brukere.on('child_added', function(user){
+      console.log(user.val());
+      const brukere = component.get('brukere');
+      brukere.push(user.val());
+
+      component.set('brukere', brukere);
+    });
+  },
+  data(){
+    return {
+      brukere: []
+    }
+  }
+};
+
+</script>
