@@ -75,7 +75,7 @@ return {
 let addedCss$1 = false;
 function addCss$1 () {
 	var style = document.createElement( 'style' );
-	style.textContent = "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n  ol[svelte-2398454431], [svelte-2398454431] ol {\n    list-style: none;\n  }\n";
+	style.textContent = "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n  ol[svelte-2839809941], [svelte-2839809941] ol {\n    list-style: none;\n  }\n  li[svelte-2839809941], [svelte-2839809941] li {\n      text-overflow: ellipsis;;\n  }\n";
 	document.head.appendChild( style );
 
 	addedCss$1 = true;
@@ -83,7 +83,7 @@ function addCss$1 () {
 
 function renderMainFragment$1 ( root, component, target ) {
 	var main = document.createElement( 'main' );
-	main.setAttribute( 'svelte-2398454431', '' );
+	main.setAttribute( 'svelte-2839809941', '' );
 	main.className = "meldinger";
 	
 	var ol = document.createElement( 'ol' );
@@ -676,7 +676,7 @@ return {
 let addedCss = false;
 function addCss () {
 	var style = document.createElement( 'style' );
-	style.textContent = "                                                                                                                                                                                                                                                                                                                                                                                                                      \n.chat[svelte-1214702622], [svelte-1214702622] .chat {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n.container[svelte-1214702622], [svelte-1214702622] .container {\n  display: flex;\n  flex: 1 0 auto; \n  flex-direction: row;\n}\n.brukere[svelte-1214702622], [svelte-1214702622] .brukere {\n  border: 1px solid;\n  flex: 1 0 auto;\n}\n.meldinger[svelte-1214702622], [svelte-1214702622] .meldinger {\n  border: 1px solid;\n  flex: 3 0 auto; \n}\n.msgbox[svelte-1214702622], [svelte-1214702622] .msgbox {\n  border: 1px solid;\n  flex:none;\n}\n";
+	style.textContent = "                                                                                                                                                                                                                                                                                                                                                                                                                      \n.chat[svelte-1978258989], [svelte-1978258989] .chat {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n.container[svelte-1978258989], [svelte-1978258989] .container {\n  display: flex;\n  flex: 1 0 auto; \n  flex-direction: row;\n}\n.brukere[svelte-1978258989], [svelte-1978258989] .brukere {\n  border: 1px solid;\n  flex: 1 0 auto;\n\n}\n.meldinger[svelte-1978258989], [svelte-1978258989] .meldinger {\n  max-width: 80%;\n  border: 1px solid;\n  flex: 3 0 auto; \n}\n.msgbox[svelte-1978258989], [svelte-1978258989] .msgbox {\n  border: 1px solid;\n  flex:none;\n}\n";
 	document.head.appendChild( style );
 
 	addedCss = true;
@@ -684,7 +684,7 @@ function addCss () {
 
 function renderMainFragment ( root, component, target ) {
 	var div = document.createElement( 'div' );
-	div.setAttribute( 'svelte-1214702622', '' );
+	div.setAttribute( 'svelte-1978258989', '' );
 	div.className = "chat";
 	
 	var h1 = document.createElement( 'h1' );
